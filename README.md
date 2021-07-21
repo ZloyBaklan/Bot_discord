@@ -3,6 +3,7 @@ This bot is hosted on the discord platform.
 It is added to the server and 
 for now is intended to inform users about 
 the channel admin and server rules, and briefly navigate through it.
+The bot is able to respond to key phrases and give an answer to them, the makings of a dialogue.
 
 Uses Discord token and API.
 
