@@ -5,26 +5,7 @@ import discord
 from discord.ext import commands
 import platform
 from dotenv import load_dotenv
-'''
-#Костыль на ошибку EventLoop is closed
-from functools import wraps
 
-from asyncio.proactor_events import _ProactorBasePipeTransport
-def silence_event_loop_closed(func):
-    @wraps(func)
-    def wrapper(self, *args, **kwargs):
-        try:
-            return func(self, *args, **kwargs)
-        except RuntimeError as e:
-            if str(e) != 'Event loop is closed':
-                raise
-    return wrapper
-
-if platform.system() == 'Windows':
-    # Silence the exception here.
-    _ProactorBasePipeTransport.__del__ = silence_event_loop_closed(_ProactorBasePipeTransport.__del__)
-#Костыль окончен
-'''
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
@@ -132,5 +113,27 @@ async def on_error(event, *args, **kwargs):
             raise
 
 client.run(TOKEN)
+
+'''
+Проблема решена, но в случае повторного возникновения ошибки:
+#Костыль на ошибку EventLoop is closed
+from functools import wraps
+
+from asyncio.proactor_events import _ProactorBasePipeTransport
+def silence_event_loop_closed(func):
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        try:
+            return func(self, *args, **kwargs)
+        except RuntimeError as e:
+            if str(e) != 'Event loop is closed':
+                raise
+    return wrapper
+
+if platform.system() == 'Windows':
+    # Silence the exception here.
+    _ProactorBasePipeTransport.__del__ = silence_event_loop_closed(_ProactorBasePipeTransport.__del__)
+#Костыль окончен
+'''
 
 #Проверка предикатов команд
